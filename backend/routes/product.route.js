@@ -5,7 +5,7 @@ import Product from "./models/product.model.js";
 
 const router = express.Router();
 
-router.get("/api/products", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const products = await Product.find({});
     res.status(200).json({ success: true, data: products });
@@ -15,7 +15,7 @@ router.get("/api/products", async (req, res) => {
   }
 });
 
-router.post("/api/products", async (req, res) => {
+router.post("/", async (req, res) => {
   const product = req.body;
 
   console.log(product);
@@ -43,7 +43,7 @@ router.post("/api/products", async (req, res) => {
   }
 });
 
-router.put("/api/products/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const product = req.body;
 
@@ -70,7 +70,7 @@ router.put("/api/products/:id", async (req, res) => {
   }
 });
 
-router.delete("/api/products/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
