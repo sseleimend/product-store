@@ -7,8 +7,12 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+
 app.post("/api/products", async (req, res) => {
   const product = req.body;
+
+  console.log(product);
 
   if (!product.name || !product.price || !product.image)
     return res.status(400).json({
