@@ -27,8 +27,8 @@ const Navbar = () => {
             colorMode !== "light" ? "colorPalette.300" : "colorPalette.800"
           }
           fontSize={{
-            base: "22",
-            sm: "28",
+            base: "22px",
+            sm: "28px",
           }}
           fontWeight={"bold"}
           textTransform="uppercase"
