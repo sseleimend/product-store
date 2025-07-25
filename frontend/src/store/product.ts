@@ -15,6 +15,10 @@ interface ProductStore {
     message: string;
   }>;
   fetchProducts: () => void;
+  deleteProduct: (id: string) => Promise<{
+    success: boolean;
+    message: string;
+  }>;
 }
 
 export const useProductStore = create<ProductStore>((set) => ({
@@ -41,5 +45,16 @@ export const useProductStore = create<ProductStore>((set) => ({
     const res = await fetch("api/products");
     const data = await res.json();
     set({ products: data.data });
+  },
+  deleteProduct: async (id) => {
+    const res = await fetch(`/api/products/${id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    set((state) => ({ products: state.products.filter((p) => p._id !== id) }));
+
+    return { success: true, message: data.message };
   },
 }));
