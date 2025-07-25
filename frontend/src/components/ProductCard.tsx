@@ -19,11 +19,7 @@ import { Toaster, toaster } from "./ui/toaster";
 import { useState } from "react";
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const [updatedProduct, setUpdatedProduct] = useState({
-    name: "",
-    price: "",
-    image: "",
-  });
+  const [updatedProduct, setUpdatedProduct] = useState(product);
 
   const textColor = useColorModeValue("gray.600", "gray.200");
   const bgColor = useColorModeValue("white", "gray.800");
@@ -50,8 +46,8 @@ const ProductCard = ({ product }: { product: Product }) => {
     });
   };
 
-  const handleUpdateProduct = async (id: string, product: Product) => {
-    const { success, message } = await updateProduct(id, product);
+  const handleUpdateProduct = async (product: Product) => {
+    const { success, message } = await updateProduct(product);
 
     if (!success)
       toaster.create({
@@ -148,7 +144,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                       onChange={(e) =>
                         setUpdatedProduct((prevProduct) => ({
                           ...prevProduct,
-                          price: e.target.value,
+                          price: Number(e.target.value),
                         }))
                       }
                     />
@@ -166,17 +162,19 @@ const ProductCard = ({ product }: { product: Product }) => {
                   </VStack>
                 </Dialog.Body>
                 <Dialog.Footer>
-                  <Button
-                    mr={3}
-                    onClick={() =>
-                      handleUpdateProduct(product._id!, {
-                        ...updatedProduct,
-                        price: Number(updatedProduct.price),
-                      })
-                    }
-                  >
-                    Add Product
-                  </Button>
+                  <Dialog.CloseTrigger position={"static"} asChild>
+                    <Button
+                      mr={3}
+                      onClick={() =>
+                        handleUpdateProduct({
+                          ...updatedProduct,
+                          price: Number(updatedProduct.price),
+                        })
+                      }
+                    >
+                      Update
+                    </Button>
+                  </Dialog.CloseTrigger>
                   <Dialog.CloseTrigger position={"static"} asChild>
                     <Button mr={3} variant={"ghost"}>
                       Cancel

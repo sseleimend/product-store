@@ -19,6 +19,10 @@ interface ProductStore {
     success: boolean;
     message: string;
   }>;
+  updateProduct: (product: Product) => Promise<{
+    success: boolean;
+    message: string;
+  }>;
 }
 
 export const useProductStore = create<ProductStore>((set) => ({
@@ -54,6 +58,29 @@ export const useProductStore = create<ProductStore>((set) => ({
     if (!data.success) return { success: false, message: data.message };
 
     set((state) => ({ products: state.products.filter((p) => p._id !== id) }));
+
+    return { success: true, message: data.message };
+  },
+  updateProduct: async (product) => {
+    const res = await fetch(`/api/products/${product._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: product.name,
+        description: product.image,
+        price: product.price,
+      }),
+    });
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    set((state) => ({
+      products: state.products.map((p) =>
+        p._id === product._id ? data.data : p
+      ),
+    }));
 
     return { success: true, message: data.message };
   },
