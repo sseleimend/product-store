@@ -15,8 +15,6 @@ export const getProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
   const product = req.body;
 
-  console.log(product);
-
   if (!product.name || !product.price || !product.image)
     return res.status(400).json({
       success: false,
@@ -35,7 +33,7 @@ export const createProduct = async (req, res) => {
     console.error("Error while creating product", error.message);
     res.status(500).json({
       success: false,
-      message: "Server error",
+      message: "Internal server error",
     });
   }
 };
@@ -70,6 +68,13 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
   try {
     await Product.findByIdAndDelete(id);
     res.status(200).json({
@@ -78,9 +83,9 @@ export const deleteProduct = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while deleting product", error.message);
-    res.status(404).json({
+    res.status(500).json({
       success: false,
-      message: "Product not found",
+      message: "Internal server error",
     });
   }
 };
