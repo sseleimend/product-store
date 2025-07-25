@@ -14,7 +14,7 @@ import { useState, type MouseEvent } from "react";
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
     name: "",
-    price: 0,
+    price: "",
     image: "",
   });
 
@@ -23,7 +23,10 @@ const CreatePage = () => {
   async function handleAddProduct(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    const { success, message } = await createProduct(newProduct);
+    const { success, message } = await createProduct({
+      ...newProduct,
+      price: Number(newProduct.price),
+    });
     if (!success)
       toaster.create({
         title: "Error",
@@ -76,7 +79,7 @@ const CreatePage = () => {
                 onChange={(e) =>
                   setNewProduct((prevProduct) => ({
                     ...prevProduct,
-                    price: Number(e.target.value),
+                    price: e.target.value,
                   }))
                 }
               />
