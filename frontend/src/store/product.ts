@@ -62,6 +62,7 @@ export const useProductStore = create<ProductStore>((set) => ({
     return { success: true, message: data.message };
   },
   updateProduct: async (product) => {
+    console.log(product);
     const res = await fetch(`/api/products/${product._id}`, {
       method: "PUT",
       headers: {
@@ -69,7 +70,7 @@ export const useProductStore = create<ProductStore>((set) => ({
       },
       body: JSON.stringify({
         name: product.name,
-        description: product.image,
+        image: product.image,
         price: product.price,
       }),
     });
